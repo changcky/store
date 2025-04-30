@@ -1,0 +1,16 @@
+# 基本配置
+title: 我的项目页面
+description: 我的GitHub Pages项目页面列表
+baseurl: "/store" # 替换为您的仓库名称
+url: "https://changcky.github.io" # 替换为您的GitHub用户名
+
+# 构建设置
+markdown: kramdown
+plugins:
+  - jekyll-seo-tag
+
+# 排除文件
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock

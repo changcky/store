@@ -7,7 +7,7 @@ title: 我的项目 HTML 页面列表
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ page.title }}</title> {% comment %} 使用 Jekyll 变量 {% endcomment %}
+    <title>{{ page.title }}</title>
     <style>
         body {
             font-family: sans-serif;
@@ -17,39 +17,198 @@ title: 我的项目 HTML 页面列表
         h1 {
             color: #333;
         }
-        ul {
-            list-style: disc;
+        /* 目录树样式 */
+        .file-tree {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .file-tree li {
+            margin: 5px 0;
+        }
+        .file-tree ul {
+            list-style-type: none;
             padding-left: 20px;
+            margin-top: 5px;
+            display: none; /* 默认隐藏子目录 */
         }
-        li {
-            margin-bottom: 10px;
+        .file-tree .directory {
+            cursor: pointer;
+            user-select: none;
+            color: #333;
+            font-weight: bold;
         }
-        a {
+        .file-tree .directory:before {
+            content: "📁 ";
+            margin-right: 5px;
+        }
+        .file-tree .directory.open:before {
+            content: "📂 "; /* 打开的文件夹图标 */
+        }
+        .file-tree .file a {
             color: #007bff;
             text-decoration: none;
+            margin-left: 20px;
         }
-        a:hover {
+        .file-tree .file:before {
+            content: "📄 ";
+            margin-right: 5px;
+        }
+        .file-tree .file a:hover {
             text-decoration: underline;
+        }
+        /* 展开/折叠图标 */
+        .toggle-icon {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            text-align: center;
+            line-height: 14px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 2px;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
     <h1>欢迎访问我的项目页面</h1>
-    <p>请点击下面的链接访问不同的 HTML 页面:</p>
-    <ul>
-        {% comment %} Jekyll 的 Liquid 模板语法开始 {% endcomment %}
-        {% comment %} site.html_pages 遍历所有被 Jekyll 处理过的 HTML 页面 {% endcomment %}
-        {% for page in site.html_pages %}
-            {% comment %} 检查页面路径是否是 index.html 本身，跳过不显示自己 {% endcomment %}
-            {% unless page.url == '/index.html' or page.url == '/' %}
-                <li>
-                    {% comment %} page.url 是 Jekyll 生成的页面相对 URL {% endcomment %}
-                    {% comment %} page.title 是页面 front matter 中定义的 title，如果没有则用页面路径 {% endcomment %}
-                    <a href="{{ page.url }}">{{ page.title | default: page.path }}</a>
-                </li>
-            {% endunless %}
-        {% endfor %}
-        {% comment %} Liquid 模板语法结束 {% endcomment %}
+    <p>请点击目录展开查看不同的 HTML 页面:</p>
+    
+    <ul class="file-tree" id="file-tree">
+        <!-- 此处将由 JavaScript 动态生成目录结构 -->
     </ul>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 存储所有页面信息
+            const allPages = [
+                {% for page in site.html_pages %}
+                    {% unless page.url == '/index.html' or page.url == '/' %}
+                    {
+                        url: "{{ page.url }}",
+                        title: "{{ page.title | default: page.path }}",
+                        path: "{{ page.path }}"
+                    },
+                    {% endunless %}
+                {% endfor %}
+            ];
+            
+            // 创建目录树结构
+            const fileTree = {};
+            
+            // 处理每个页面，构建目录树
+            allPages.forEach(page => {
+                // 分割路径
+                let pathParts = page.path.split('/');
+                let fileName = pathParts.pop(); // 最后一部分是文件名
+                
+                // 从根目录开始
+                let currentLevel = fileTree;
+                
+                // 构建目录结构
+                pathParts.forEach(folder => {
+                    if (folder) { // 避免空文件夹名
+                        if (!currentLevel[folder]) {
+                            currentLevel[folder] = {};
+                        }
+                        currentLevel = currentLevel[folder];
+                    }
+                });
+                
+                // 添加文件到当前目录级别
+                if (!currentLevel._files) {
+                    currentLevel._files = [];
+                }
+                currentLevel._files.push({
+                    name: fileName,
+                    url: page.url,
+                    title: page.title
+                });
+            });
+            
+            // 渲染目录树到DOM
+            const fileTreeElement = document.getElementById('file-tree');
+            
+            // 递归渲染目录结构
+            function renderDirectory(container, directory, path = '') {
+                // 遍历目录中的文件夹
+                Object.keys(directory).forEach(key => {
+                    if (key !== '_files') {
+                        const dirPath = path ? `${path}/${key}` : key;
+                        const dirLi = document.createElement('li');
+                        
+                        // 创建目录项
+                        const folderSpan = document.createElement('span');
+                        folderSpan.textContent = key;
+                        folderSpan.className = 'directory';
+                        folderSpan.setAttribute('data-path', dirPath);
+                        
+                        // 添加展开/折叠图标
+                        const toggleIcon = document.createElement('span');
+                        toggleIcon.className = 'toggle-icon';
+                        toggleIcon.textContent = '+';
+                        folderSpan.prepend(toggleIcon);
+                        
+                        dirLi.appendChild(folderSpan);
+                        
+                        // 创建子项容器
+                        const subUl = document.createElement('ul');
+                        dirLi.appendChild(subUl);
+                        
+                        // 添加点击事件处理
+                        folderSpan.addEventListener('click', function() {
+                            this.classList.toggle('open');
+                            if (this.classList.contains('open')) {
+                                toggleIcon.textContent = '-';
+                                subUl.style.display = 'block';
+                            } else {
+                                toggleIcon.textContent = '+';
+                                subUl.style.display = 'none';
+                            }
+                        });
+                        
+                        // 递归渲染子目录
+                        renderDirectory(subUl, directory[key], dirPath);
+                        
+                        container.appendChild(dirLi);
+                    }
+                });
+                
+                // 渲染当前目录中的文件
+                if (directory._files) {
+                    directory._files.forEach(file => {
+                        const fileLi = document.createElement('li');
+                        fileLi.className = 'file';
+                        
+                        const fileLink = document.createElement('a');
+                        fileLink.href = file.url;
+                        fileLink.textContent = file.title || file.name;
+                        
+                        fileLi.appendChild(fileLink);
+                        container.appendChild(fileLi);
+                    });
+                }
+            }
+            
+            // 开始渲染根目录
+            renderDirectory(fileTreeElement, fileTree);
+            
+            // 如果根目录没有子目录，直接显示文件
+            if (fileTree._files && Object.keys(fileTree).length === 1) {
+                fileTree._files.forEach(file => {
+                    const fileLi = document.createElement('li');
+                    fileLi.className = 'file';
+                    
+                    const fileLink = document.createElement('a');
+                    fileLink.href = file.url;
+                    fileLink.textContent = file.title || file.name;
+                    
+                    fileLi.appendChild(fileLink);
+                    fileTreeElement.appendChild(fileLi);
+                });
+            }
+        });
+    </script>
 </body>
 </html>

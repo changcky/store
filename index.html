@@ -1,21 +1,55 @@
 ---
-# 你可以在这里添加可选的变量，比如 layout: default，或者 title: 首页
-# 如果你只需要它被Jekyll处理，一个空的 Front Matter 也足够
+layout: default
+title: 我的项目 HTML 页面列表
 ---
-{# 使用 Jekyll 变量 #}
-欢迎访问我的项目页面
-请点击下面的链接访问不同的 HTML 页面:
-
-<ul>
-{% for page in site.html_pages %}
-    {# 检查页面路径是否是 index.html 本身，跳过不显示自己 #}
-    {# 注意：page.url 对于 index.html 是 /，对于 1.html 是 /1.html #}
-    {% unless page.url == '/index.html' or page.url == '/' %}
-        <li>
-            {# page.title 如果在文件的 Front Matter 中定义了 title，则显示 title，否则显示 page.path #}
-            <a href="{{ page.url }}">{{ page.title | default: page.path }}</a>
-        </li>
-    {% endunless %}
-{% endfor %}
-</ul>
-{# Liquid 模板语法结束 #}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ page.title }}</title> {% comment %} 使用 Jekyll 变量 {% endcomment %}
+    <style>
+        body {
+            font-family: sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        ul {
+            list-style: disc;
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>欢迎访问我的项目页面</h1>
+    <p>请点击下面的链接访问不同的 HTML 页面:</p>
+    <ul>
+        {% comment %} Jekyll 的 Liquid 模板语法开始 {% endcomment %}
+        {% comment %} site.html_pages 遍历所有被 Jekyll 处理过的 HTML 页面 {% endcomment %}
+        {% for page in site.html_pages %}
+            {% comment %} 检查页面路径是否是 index.html 本身，跳过不显示自己 {% endcomment %}
+            {% unless page.url == '/index.html' or page.url == '/' %}
+                <li>
+                    {% comment %} page.url 是 Jekyll 生成的页面相对 URL {% endcomment %}
+                    {% comment %} page.title 是页面 front matter 中定义的 title，如果没有则用页面路径 {% endcomment %}
+                    <a href="{{ page.url }}">{{ page.title | default: page.path }}</a>
+                </li>
+            {% endunless %}
+        {% endfor %}
+        {% comment %} Liquid 模板语法结束 {% endcomment %}
+    </ul>
+</body>
+</html>

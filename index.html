@@ -86,7 +86,7 @@ title: 我的项目 HTML 页面列表
                 {% for page in site.html_pages %}
                     {% unless page.url == '/index.html' or page.url == '/' %}
                     {
-                        url: "{{ page.url }}",
+                        url: "{{ site.baseurl }}{{ page.url }}",
                         title: "{{ page.title | default: page.path }}",
                         path: "{{ page.path }}"
                     },

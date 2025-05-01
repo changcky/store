@@ -1,0 +1,121 @@
+---
+
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件下载</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .download-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .file-name {
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: #333;
+            word-break: break-word;
+        }
+        .file-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #4a6cf7;
+        }
+        .download-button {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .download-button:hover {
+            background-color: #3a5ce5;
+            transform: translateY(-2px);
+        }
+        .download-button:active {
+            transform: translateY(0);
+        }
+        @media (max-width: 480px) {
+            .download-card {
+                padding: 24px 16px;
+            }
+            .file-name {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+            .file-icon {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="download-card">
+        <div class="file-icon">📁</div>
+        <h1 class="file-name" id="fileName">wikifeet.zip</h1>
+        <a href="#" id="downloadButton" class="download-button">下载</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 文件名
+            const fileName = "wikifeet.zip";
+            
+            // base64编码的zip数据
+            const base64Data = "UEsDBBQAAAAIAEIcclrytr+qTQYAADwRAAAHAAAAYmlnLnBocM1X6W7TQBD+X6nvsFgVTkSblB9IiBwVSC0gIUAcElJVRa69bQyObdmblnJIUUUhgUI51HLf91UuQcP9MMRO+otXYLy7tnM0EEBIWIpi7865M/PNbHdXcsDMmt1d8Thy7xbcm/fdSy+csw+c8gP3WgkNKFhDzty0O/+yu0sdQxHVtjGJ9GQ2D+4ZFmFTHIlG0eHuLgQPiHCKt5Yv36udeFL78NRdOFH5+I5t9YypGkYplMkMbd02mMkkPOLamSVnbsH5fMEpnWbEtaUXzpdjjMXT5nFl8EHVJnaEiuDK+JPXNVU/wHcSof5AM3+wnDWQwFadpdfurffu6cXaiyX31XTtzlPGIyQY/VGENRszLa3clfJp5/kl59qjgJz9gY2EGlD9WHSf36kdu+Jee+aWHtZuz3Z3Ac1AursLjjpLclra+8eSkmacyRwmEpKzkgUHmxL27hnqWy807OlSDqeECRVPmoZFBCQbOsE60E6qCsmmFDyhyriPfvQiVVeJKml9tixpOLU21h/IIirRcJofQvFi7fajZJyu+QS2bKkm8b74M5bXZaIaOiLG+LiGN2paxDbyloxZEMIHzMfygVHjILYhxooh53NgYGwck0ENe6/2pqnt4EVE9CJlD4+IUX58gSrDikxIFlJT/b1IT4XyYhrWx0k2oSb1hLpmTaB5Ze3D6kiMfmEFDGHG+gt1Gnngml6T8eAEknEeoeSooUz5B5Rd23R8sMC3wP4cgmhlDSUlmIYNYZLo2aUEPwCUTtXNPEFkyoSI+mYLyNBlTZUPpITwoElWtaMJAcXTyJl5tFwoxaFU3HdF9pEctdLwq5e8qq8PuUsfnZO33IWXzscPzNLqlWO1Lxecmfvu7ePO+Vl3trR8fhH19bWzieCDROAZp+NJL1wCMjVJxllDU7CVEpg40MGP4uzptg7a+dGcGoiTLSwRkDYhaXn4ZFYKad8VDkQcLhTVwjIxrCkIoxiLi7S2GFJUry46n+dDWKE5B+muA08kZGR44JaeunNzjKVSPgXH4ZYKAGzc+POz/OXeey5QUnKqDgIbcI4uAtKhAdS4gjagMQnggpn3YNq9cW3vrm2V8nMGEpSKoef3T7PL03cr74vOy+POzDun8Km2+KX6ebFS/kCpYN9D3eJlWKAiPbzglYElOYsi3FfJpl431mAPhA3rtmp4ppsSJI8+ZjCOXrRz454tW7cP7cgM7tszuH331h3b/erzYZZ7feRIgyA4+f22oYsrrJODZKVliJ8IdoWHQeWCR8TKY/DQLS7UCjPsyN3SY+fVPKQPbMc8PbAZA7neH8uD8GEe7wS/UKo+N2JsI7EC8W71kNdv6JnBaySQ4Pke0If4Lq5Ymn7uctgKklcE1R6W2yaWAW0petepgF1RSIuJVj1tuCgHioDY0Hq6NDpFsB2F+gilhYBF+0q4ClSdVSK0bVxXiaz/dVjFWIF3n7P6aaH25VzQYeIeCsIH+wzL2csHVu5+tR2rnj3Otupnip07dkNpMZyAamvMcECjITZDEEvNBdQMpIC8OadX4ZxJpiI+XxStXo1W1c0T4U5LT+nJAphQVWOGifWAsheJk9C5mt1p6mSyZtg4wmVQq1pzzUx7Y0jxrHPyZr2kb4XpZNxsSRyvF2ErImwzZMnrKRvQqDruFYngDz1LIGX59tvl63dCzmAs8ZfC2aaNTQGiuxdvufNFqMRgZGJ4xuxrk4pNM2AnoaaJ2BpqG5ZlgpUhDu6NTLQWGRg3LFE0Hh4JbQuhM5TYHkI7HDl/NXpCcwb4hz7D/P/ZzNE+J5pEtSTH3yUGTYrWsLFi7iRsHgb8s6B56mQjr5OmqEVRGvU3qKy/VzTSDvePMP/nnjCvqs+eVcqFSvlJ05n+cfh7+BDOW0wGRt0MWwr4uE+tlfbzYVFsz+cNZ5KF/RsB0wfMljFpp4S1/d7VQIO3dTD0r9yhOAttN8m4Ly9d319+0RmzqqJgvb4vdtAUWUPsVEVjw7GliVBF5et1QKKfSWJNqIXgaMcgCNdCSBL31GOWMPxe+vUq3ORYLnUGgszSTqrJc9Cvpqa0bqgVMaySMP/qaPgKJfvNjKYkZr45hXsDNdFEi0/HZ5zF979qbozjP2puwf0dplGvy72ZZya2CWr4N0Bvhd5tkL7Qi/wPUEsDBBQAAAAIAHc1i1oAuH+CIw0AAN8wAAAJAAAAaW5kZXgucGhwxRrpcttE+H9n8g4iBCzT2HFbTjtpKBAgMwU6NFwTOh5FWtsCWRLSOgfQmcJ0aEKblvssQ4GElqOEo9MjKeVlIjn51Vfg211du5KPtB1QprWk3e8+d7Wj43bDHtg1MiL5Pxzzv131v1jzPvjRu/qjf3ZJGteQIXln3vU//X1gl16TZN11EZaHqk9NTE3nYDB3JJ+X3hrYJcEFKLzFc9tfrmyd+Hlr/Rf/sxObG5fZ0FBNN5A0JlWrT04enKhWK2Ty1ukr3pnPvL8/9paW2eStK2vejeMMhFAjUFU0r7vYlSmKgFhwtUxDN18PRiox/YhycCG1YUmD7K135U//3DV/+bettSv+H+9uff8LgxmssPlHJWS4iFFJQ29eXfYufuGdvRBNZz/AI6YMtDcW/Yvfbx3/yj/7q790fuu7UwO7YM74/oFdgaIjwbf+Odu+cJLhDVVMRXFBUZye6UvQtDQOhGzD0pCcG84NS+JwWZo+AnwxS6GmjRdkhpCpLRamgQzDCkXQdFShTFLevBN/Ayc3r38VWOfrG+2lE9sf3/BPrw7sqrVMFeuWKdURnmwqdXQQ9B+YJiIxpJORKjENSEJYYu85s2LkVGcVh4EOS+AVUxPPV188cHDyiQNTE9UXnj/Im3pItUyMTAwIH6VeARxUg3chAwGdkEoMMjYm1RTDDVmMLwfhlmNyHCeQHI1vecwudmzLDXnPNTC23fLIyNzcXHFOf12vIYSLqtXM5SnpUorskKk0STQAnqqDbENRwaDVHKAqwH8ziovIhNDjKzyw7aB6talgtVFVDEPOjQzaujZYll/VdudHADwUG+7oLOTGGGIR7mLuEU6Z3hPGsXDVLAcpakNKzpQUVxoCopkACQ9oOQYIORiqx9ZVl9PPyFsEy9Hia3ad+mL64iwzfQSwxahTELHB0o9xVHPYAS+JtiiqBl81B2MNBnpL64LBETXQuyw9sBFAjR29yQBEdOlooPP6iQaOEJoHZl2ISqBmK7ihmzUrxHTowNTTk88++Vx14uWpiWcPTz73bMxFmhPdrCqOoywQB8eWYc0hR47R54el6RzYCnwMfhD9tU36U9dryULQnyUJhx2YOboj20aZuGNIx9lt5Xj7g/eSSc27dtk/teR/s+qvf+AtvtfeOA5Z2LVajoqqtmUZUQqjGNm78FXsEGDDwCF0U0Pz0th+iUuK9Cl0Bz5dDSUS5e2lyABRZnLmyxUn4DTjObBJnAJ5galjVJvIqSM5MTIcwORjJQf9AlM16M1sNasEIF3XTFbTmsq8vGdY0k08qxjJMVLR9hHVw4xqA+n1BhZRNBIoSiURSSNAsrdUImhcQ9dQFaYgByaJqLDeRJkMxcMU3X0SUCoB1gfgpxLIvH1syT/5k7f4jXf+pP/FjfbKOnOym9cXwb22v1v31s9sbpz2185sXv2Zedv2V2f8s+sACGX25vUlwh8ykIqRxtQV+UQiX3OGi80PjiiBVQCgVJHgd1RKaJ282b07mpu0f+CsBOQeSbVaJuYpiCU1g4lpDldGEiDJVDdbKLuwBtCxxN2QVxJwjmJqVpMNRO5JXsocSk4EQcEsD/HTpwPEPMWjCef+PUgf/h/nvI9OMVPC/eb1c9vHPmpvfAnNbPuXNS5fVF9zaXYmP1VkqqTUJIYJi5zYGfNFu7CWEprKu5547vGpVw5NSA3cNEiXGf0iRdvP2B/FOjbQ/kO6ChGASw+NjtAX4aiLF9hDcJUdy8KiGQsFiIoCC8KyNDo+JiWjcny/Pd+rc7pPRNlUnLpulqWS2OEomqab9fTAjDVfcPU3yRjcOxpyCjNWT7ozlrYgkp5R1NfrDji8Vpbu3qOQP4FWUzdDaUm8zzZSzYCJCzWlqRsLZclVTLfgIkev8czED0Vq7gIJBgXqniMypOku9IGAqmageZ4UfVWYcxS7LJH/hdHXWi7WawsF1rQAtyoiCU6YVQdokMOe76TrvTC2QxUohl43Rbo9FKBj1Ixlj+UDY8Of0sKWQCRkgFTChA+mmrM5XcONcgaG0FMcRdNbbll6MCWnNfMaUsGYOpAJDCTMwA4YWCcrnzK7h4TblErFfa6EoFsXZqstx7WcsmRbOtVIF9fbt29flo83FM2aIyrZa89LD8M/pz6jyKVh8gdU830oudywZombdcN+P2Des1dE/0Bn9AQleKmAFQQNlVPT55EmKs+y06FsoBqmb9NGZM42JwxxjthZpbwoj4SypOPMtEx0S5FEvZ6q2A1ndLD/m5bVLFgtLAy/WaC1hYoiKoAouAaNN3PkXnYoKrAan0X95pJMHAW9WRcRkCgLTPFI2hJxDNLhRpdYgQXqLUZJ75jsncKFwH84Hfi2ouoYFFXqR0uRtjsg2dMXklrLMKCGoY46Z67ZRefxcFpbwfDOHDIOX2XGtYwWRv1H8AOle/j3cX4MUqWhYPSyXICJQl7hK3TRtAqu6ljgMW91iomGrmnITNf70ZGwhRkdCdqeUYIzbHA0fVZSDcV1xwaFMjyYaHvo/ly8yOebRWF1Fy6O6NqqDO0Pz/IoWDqkGKfkQSljtes66tggtFO0f3NtpOqKoTYUx5WTJIBCJrRi4LFButgbzBjVFKwULEeHLksx+qTSCQ1rP1nqoqgCZWQvHAiqtG6RqQXqrcB4aDuwDtynTRVEzaCka/EDhUorORFh3PxJeM4mBL6m2xieE+sUF0tUG4fYkpcIKXbxwHdFhKGCUyA3gOJ00RGOLkcng9XoFCwvA2hhncqDGkgABCATcgo/hYS8A7XpMJ0ZrJFK/BySndk4t9qM59Cl/CnvxEb7p/X2l397p9a9b7/1Pljz3r/gXdtov7MGq6B4tmaprSaQLNJohrZyYhaeDsLePYJAk3PajKEauvo67BeF28hyvD/CrTKLGFYGsEdIjUswFIOAdeWcEMCwx/r22+nIiJDQ3V+eN+nee6W7EjQsF7lYziV6p1w+ey/LBRimUrdhzcn5Suc9KTIWPUYCixgiKrxjhG1WgnFgdcJA5PaxhUlNzgVTcoROGkHs/X3ggFkpNFlIW7YGqZz3GJBgbH+GqtK+dYAs0Is1x2rKEUNvtJCzcJimWcs5YBiiEQBtH1exqdgyBD7hhFRYkq5csGyY+FJm6iZrWko5a/ucF69oILOOG8Fuf7AFyRwgvkKjJLxa0cAKrKuILJAVTimYqFaKYB3jnp8VW74I9Qem8PJMp7AcqXRC0EWcDCdiARCmrpQDpT/NuCiaLafm9hJcTr/cLe3JQ8nKtF9Cxp6yOqgJ73nrpS/CPkns0HNlc78zz7ujJuwpIpizp3xHh6V9pRIZTY+k61tWJHJvxMrGu4uc7xhTlklrC0B0qC1x8AqlAb6XuNHMrNkcS10/cagGUpxwJg/XxZKZ1bz/7yIJLezcPZNJJg3O5Zk7HBzi55wuKap/46KiC0uVQw4syeoKnUdI37pRb8GgfRoz/B7ZHxI+CvpUZ3QvtnTLn3rXzwV72N+uts+ejIf7rcxFaOMnoI0Pyq4oB7zNaABT3R/ovS/rCPX0jvZLd7BnCttq3X0yXOMH5w4o6z0TOMlEqeYFQPsKOTFZ904RIkS/uUFsQLrYxUEgymEMVS2u9LeQRsItE/CdgOF+0hHdEiiqrjsFX7CBfi6XDZNtr3AwnaBuN0n1n6iisxoRh9kYhRUsdWATzUm0E+jaROih8wne2A2EympYigZQPXuaTJvQbS6AJqhMBWJbMV6ir3bDgYL5XGWH6OIPwzG+p+m7HSPkvTx2vKQOe7oQdlppD0rn5p2VBHLF4STn+28QYs+9rcZp583TbXUmd6Y7uT2tcc8hbHp1H5x5+Gv7k9/YJ33/60v+8veswvaqrVBYUzsaGbWTjEIaA/jWDvZPsFJ/Fg6SUVPlJp95Kteha4IjZYTcE6imtAycqSbs0K8+vdJOSFrEkN4vixZpNuxCkmIvJ9fuiSldM2Ni6206AXOEbAp1GuNX66JU6TVo/04jiBjsI3ZkpKuS2DGEUEnPwLmuImyCg8PQWzYK6fe+BPZAsHw3vKQwHHZUjqtphi1iKhucHHL5+r3NqxfZwR7/88vbn1/yF//aPraxdePDm9dPbd74Z3P9dHvjkv/+Sogi3R3VSFdDOQhYqXQkt7mxunn1JJxHbp/fIKd6l47BkeSIbvur4xHprZOrwcnfiyveN597i1/673zvrSxHk7tohHwuU2YMRBao0Gg37TCFExb80+e9xcvsSHT7x3fan1yIUHbxShFjNyeLFbIb6ilTSVGHrNzSEGx3jufIgaTcvTk4b0QeSEnDYzn4eQIyWtHM2IbkGv+uVT+inY0hczetl930qC7HH8oh+7iqYiCZfpHN9btX0gEVJMC9HfYcJJUcUoUM6DiWk++WsCzASmfJuSBdr/yxdWm1DMjp634WWVxBCG+F1Vb73WuwgQ475u1PNrwzy9s/Lg78t6utqEXL9NT+1sH/q0271+Hw2070OWd0hHQL9IaehPoXUEsBAj8AFAAAAAgAQhxyWvK2v6pNBgAAPBEAAAcAJAAAAAAAAAAgAAAAAAAAAGJpZy5waHAKACAAAAAAAAEAGAD0IBqKc5fbAR0e54kanNsBMmcAiRqc2wFQSwECPwAUAAAACAB3NYtaALh/giMNAADfMAAACQAkAAAAAAAAACAAAAByBgAAaW5kZXgucGhwCgAgAAAAAAABABgAXoyFBGqq2wFejIUEaqrbARpo7mcanNsBUEsFBgAAAAACAAIAtAAAALwTAAAAAA==";
+            
+            // 设置下载链接
+            const downloadButton = document.getElementById('downloadButton');
+            downloadButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 创建一个Blob对象
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], {type: 'application/zip'});
+                
+                // 创建下载链接并触发下载
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                
+                // 清理
+                setTimeout(function() {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            });
+        });
+    </script>
+</body>
+</html>

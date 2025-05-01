@@ -1,0 +1,121 @@
+---
+
+---
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>文件下载</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 16px;
+            box-sizing: border-box;
+        }
+        .download-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 32px;
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        .file-name {
+            font-size: 24px;
+            margin-bottom: 24px;
+            color: #333;
+            word-break: break-word;
+        }
+        .file-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #4a6cf7;
+        }
+        .download-button {
+            background-color: #4a6cf7;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 32px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+        .download-button:hover {
+            background-color: #3a5ce5;
+            transform: translateY(-2px);
+        }
+        .download-button:active {
+            transform: translateY(0);
+        }
+        @media (max-width: 480px) {
+            .download-card {
+                padding: 24px 16px;
+            }
+            .file-name {
+                font-size: 20px;
+                margin-bottom: 16px;
+            }
+            .file-icon {
+                font-size: 36px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="download-card">
+        <div class="file-icon">📁</div>
+        <h1 class="file-name" id="fileName">当前主机php版本 超过大小文件数发送邮件脚本.zip</h1>
+        <a href="#" id="downloadButton" class="download-button">下载</a>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 文件名
+            const fileName = "当前主机php版本 超过大小文件数发送邮件脚本.zip";
+            
+            // base64编码的zip数据
+            const base64Data = "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";
+            
+            // 设置下载链接
+            const downloadButton = document.getElementById('downloadButton');
+            downloadButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 创建一个Blob对象
+                const byteCharacters = atob(base64Data);
+                const byteNumbers = new Array(byteCharacters.length);
+                for (let i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                const byteArray = new Uint8Array(byteNumbers);
+                const blob = new Blob([byteArray], {type: 'application/zip'});
+                
+                // 创建下载链接并触发下载
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = fileName;
+                document.body.appendChild(a);
+                a.click();
+                
+                // 清理
+                setTimeout(function() {
+                    document.body.removeChild(a);
+                    window.URL.revokeObjectURL(url);
+                }, 0);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -492,20 +492,7 @@ title: 我的项目 HTML 页面列表
                 searchViewBtn.classList.add('active');
             });
             
-            // 模拟数据用于测试（实际使用时请删除）
-            // 这部分代码仅用于演示，实际使用时应该通过AJAX加载真实内容
-            function simulatePageContents() {
-                allPages.forEach((page, index) => {
-                    // 模拟一些假的内容
-                    allPages[index].content = `这是${page.title || page.path}的模拟内容。
-                        这个页面包含了一些示例文本，用于测试搜索功能。
-                        您可以搜索关键词来找到此页面。
-                        这是一个示例HTML页面，展示了一些基本的内容结构。`;
-                });
-            }
-            
-            // 仅用于演示，实际使用请删除
-            simulatePageContents();
+          
         });
     </script>
 </body>

@@ -1,0 +1,58 @@
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>记事本</title><style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    #content {
+        flex: 1;
+        width: 100%;
+        border: none;
+        resize: none;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+</style></head>
+
+<body>
+<textarea id="content" readonly># 标题
+
+**加粗文字** 和 __另一种加粗__
+
+~~删除的文字~~
+
+行内代码：`console.log()`
+
+代码块：
+```
+<img src="https://markdown.com.cn/assets/img/philly-magic-garden.9c0b4415.jpg" alt="图片alt" title="图片title">
+```
+<img src="https://markdown.com.cn/assets/img/philly-magic-garden.9c0b4415.jpg" alt="图片alt" title="图片title">
+
+
+
+
+
+链接支持：
+
+
+示例：[Google](https://google.com) → <a href="https://google.com">Google</a>
+
+斜体支持：
+
+新增了 *斜体* 和 _斜体_ 的支持，转换为 <em>
+<img src="http://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" alt="图片alt" title="图片title">
+<img src="http://www.baidu.com/img/PCtm_d9c8750bed0b3c7d089fa7d55720d6cf.png" alt="图片alt" title="图片title">
+
+![avatar](https://markdown.com.cn/assets/img/philly-magic-garden.9c0b4415.jpg)</textarea>
+
+<script>
+    // 页面加载完成后自动执行
+    window.onload = function() {
+        // 不需要任何解密操作，直接显示内容
+    };
+</script>
+</body></html>

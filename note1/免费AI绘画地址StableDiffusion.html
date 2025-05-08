@@ -1,0 +1,140 @@
+---
+
+---
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>加密记事本</title><style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    .controls {
+        padding: 4px;
+        background: #f5f5f5;
+        border-bottom: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+    .controls > * {
+        margin: 0;
+        height: 28px;
+    }
+    #password {
+        width: 150px;
+    }
+    #content {
+        flex: 1;
+        width: 100%;
+        border: none;
+        resize: none;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+    .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 10px 20px;
+        background: #4CAF50;
+        color: white;
+        border-radius: 4px;
+        display: none;
+    }
+</style></head>
+
+<body>
+<div class="controls">
+    <input type="password" id="password" placeholder="输入密码">
+    <button onclick="decrypt()">解密</button>
+</div>
+
+<textarea id="content" placeholder="解密后的内容将显示在这里"></textarea>
+<div id="secretData" style="display:none">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</div>
+<div id="isEncrypted" style="display:none">true</div>
+<div id="toast" class="toast" style="display: none;">请输入密码解密内容</div>
+
+<script>
+    // Base64编码解码函数
+    function base64ToBytes(base64) {
+        const binString = atob(base64);
+        return Uint8Array.from(binString, (m) => m.charCodeAt(0));
+    }
+
+    function bytesToBase64(bytes) {
+        const binString = Array.from(bytes, (x) => String.fromCodePoint(x)).join("");
+        return btoa(binString);
+    }
+
+    // AES加密相关函数
+    async function getKey(password) {
+        const enc = new TextEncoder();
+        return await crypto.subtle.importKey(
+            "raw",
+            await crypto.subtle.digest("SHA-256", enc.encode(password)),
+            "AES-GCM",
+            false,
+            ["encrypt", "decrypt"]
+        );
+    }
+
+    async function decryptData(ciphertext, password) {
+        try {
+            const key = await getKey(password);
+            const data = base64ToBytes(ciphertext);
+            const iv = data.slice(0, 12);
+            const encrypted = data.slice(12);
+            const decrypted = await crypto.subtle.decrypt(
+                { name: "AES-GCM", iv },
+                key,
+                encrypted
+            );
+            return new TextDecoder().decode(decrypted);
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // UI相关函数
+    async function decrypt() {
+        const password = document.getElementById('password').value;
+        if (!password) {
+            showToast('请输入密码');
+            return;
+        }
+
+        const encrypted = document.getElementById('secretData').textContent;
+        if (!encrypted) {
+            showToast('没有加密内容');
+            return;
+        }
+
+        const decrypted = await decryptData(encrypted, password);
+        if (decrypted === null) {
+            showToast('密码错误或内容损坏');
+            return;
+        }
+
+        document.getElementById('content').value = decrypted;
+        showToast('解密成功');
+    }
+
+    function showToast(message) {
+        const toast = document.getElementById('toast');
+        toast.textContent = message;
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    // 页面加载完成后自动执行
+    window.onload = function() {
+        const secretData = document.getElementById('secretData').textContent;
+        if (secretData) {
+            document.getElementById('content').value = '';
+            showToast('请输入密码解密内容');
+        }
+    };
+</script>
+</body></html>

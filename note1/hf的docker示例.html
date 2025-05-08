@@ -1,0 +1,96 @@
+<html lang="zh-CN"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>记事本</title><style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    #content {
+        flex: 1;
+        width: 100%;
+        border: none;
+        resize: none;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+</style></head>
+
+<body>
+<textarea id="content" readonly>Dockerfile
+
+# 使用基础镜像
+FROM docker.io/mtxyt/merlin2api:1.0
+
+# 暴露端口
+EXPOSE 8802
+
+# 设置环境变量（可选）
+ENV UUID=your_uuid
+ENV AUTH_TOKEN=your_token
+
+# 启动应用
+CMD ["merlin2api"]
+
+
+------------------------
+
+Dockerfile
+
+FROM python:3.9-slim
+WORKDIR /code
+COPY ./requirements.txt /code/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . /code/
+CMD ["python", "app.py"]
+
+
+requirements.txt
+
+Flask==2.3.3
+requests==2.31.0
+flask-cors==4.0.0
+
+
+
+
+.gitignore
+
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+*.log 
+
+
+
+
+-------------------
+Dockerfile
+
+FROM golang:1.23-bullseye
+WORKDIR /app
+ENV UUID="1c5627f1-b002-4c28-914f-95605ee34758"
+RUN mkdir -p /.cache && \
+    chmod -R 777 /.cache
+COPY api/ ./api/
+COPY go.mod go.sum ./
+RUN go mod download
+RUN uname -a
+EXPOSE 7860
+CMD ["go", "run", "api/chat.go"]
+
+---------------</textarea>
+
+<script>
+    // 页面加载完成后自动执行
+    window.onload = function() {
+        // 不需要任何解密操作，直接显示内容
+    };
+</script>
+</body></html>
